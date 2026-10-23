@@ -1,0 +1,12 @@
+{
+  "name": "rto-reco-backend",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "npm --prefix server install",
+    "start": "npm --prefix server start",
+    "dev:db": "npm --prefix server run dev:db",
+    "migrate": "npm --prefix server run migrate",
+    "test": "npm --prefix server test"
+  }
+}

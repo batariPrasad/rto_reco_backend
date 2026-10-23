@@ -1,0 +1,34 @@
+# Render Blueprint: the API and its PostgreSQL database. The React app goes on Netlify.
+databases:
+  - name: rto-db
+    databaseName: rto
+    user: rto
+    plan: free            # free databases are deleted by Render after 30 days: switch to a paid plan for real use
+
+services:
+  - type: web
+    name: rto-reco-api
+    runtime: node
+    plan: free            # free services sleep after 15 minutes idle (first request then takes ~1 minute)
+    buildCommand: npm --prefix server install --omit=dev
+    startCommand: npm --prefix server start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rto-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN          # your Netlify address, e.g. https://pokonutrto.netlify.app
+        sync: false
+      - key: ADMIN_USERNAME       # first admin, created on first start
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY       # only for photographed PODs
+        sync: false
